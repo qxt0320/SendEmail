@@ -14,10 +14,20 @@ def create_grades_entry(df, student_id):
         grades_entry += f"<li>{row['课程名称']}: {grade}</li>"
     grades_entry += '</ul>'
     return grades_entry
+def create_gpa_entry(df, student_id):
+    # 根据学生ID筛选出该生的所有绩点
+    student_gpa = df[df['学号'] == student_id]
+    # 创建绩点条目的列表
+    gpa_entry = []
+    for _, row in student_gpa.iterrows():
+        gpa = float(row['五分成绩'])
+        gpa_entry.append(gpa)
+    return gpa_entry
 
-def generate_email_content(student_id, student_name, grade_entries):
+def generate_email_content(student_id, student_name, grade_entries, gpa_entrise):
     # 将成绩条目转换为 HTML 格式的字符串
-    grades_str = grade_entries 
+    grades_str = grade_entries
+    gpa_average = sum(gpa_entrise)/len(gpa_entrise)
     email_content = f"""
     <html>
     <head>
@@ -29,7 +39,8 @@ def generate_email_content(student_id, student_name, grade_entries):
     <body>
         <p>亲爱的<strong>{student_id}{student_name}</strong>同学:</p>
         <p>祝贺您顺利完成本学期的学习！教务处在此向您发送最新的成绩单。</p>
-        {grades_str}
+        {grades_str} 
+        <p>您的绩点为：{gpa_average}</p>
         <p>希望您能够对自己的成绩感到满意，并继续保持努力和积极的学习态度。如果您在某些科目上没有达到预期的成绩，不要灰心，这也是学习过程中的一部分。我们鼓励您与您的任课教师或辅导员进行交流，他们将很乐意为您解答任何疑问并提供帮助。请记住，学习是一个持续不断的过程，我们相信您有能力克服困难并取得更大的进步。</p>
         <p>再次恭喜您，祝您学习进步、事业成功！</p>
         <p>教务处</p>
