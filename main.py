@@ -30,6 +30,9 @@ def main():
             # 创建该学生的成绩条目列表
             grade_entries = create_grades_entry(df, student_id)
 
+            # 创建该学生的绩点条目列表
+            gpa_entries = create_gpa_entry(df, student_id)
+
             # 从DataFrame中获取该学生的姓名，假设同一个学号对应的姓名是唯一的
             student_name = df[df['学号'] == student_id]['姓名'].iloc[0]
 

@@ -15,6 +15,15 @@ def create_grades_entry(df, student_id):
         grades_entry += f"<li>{row['课程名称']}: {grade}</li>"
     grades_entry += '</ul>'
     return grades_entry
+def create_gpa_entry(df, student_id):
+    # 根据学生ID筛选出该生的所有绩点
+    student_gpa = df[df['学号'] == student_id]
+    # 创建绩点条目的列表
+    gpa_entry = []
+    for _, row in student_gpa.iterrows():
+        gpa = float(row['五分成绩'])
+        gpa_entry.append(gpa)
+    return gpa_entry
 
 def generate_email_content(student_id, student_name, grade_entries):
     # 将成绩条目转换为 HTML 格式的字符串
