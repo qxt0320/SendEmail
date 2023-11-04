@@ -1,11 +1,11 @@
 # 导入自定义的函数
 from read_excel import read_excel_file
-from email_content_generator import generate_email_content, create_grades_entry
+from email_content_generator import generate_email_content, create_grades_entry, create_gpa_entry
 from send_email import send_email
 import tkinter as tk
 from tkinter import filedialog
 
-
+gpa_entries = []
 filepath = ""
 root = tk.Tk()
 root.geometry("400x200")
@@ -15,7 +15,7 @@ root.attributes('-alpha', 0.95)
 def main():
     # 定义Excel文件路径，假定文件位于项目的data文件夹下
     # excel_file_path = 'data/成绩表.xlsx'
-
+    global gpa_entries
     gui()
     # 读取Excel文件，获取DataFrame
     df = read_excel_file(filepath)
@@ -30,15 +30,18 @@ def main():
             # 创建该学生的成绩条目列表
             grade_entries = create_grades_entry(df, student_id)
 
+            # 创建该学生的绩点条目列表
+            gpa_entries = create_gpa_entry(df, student_id)
+
             # 从DataFrame中获取该学生的姓名，假设同一个学号对应的姓名是唯一的
             student_name = df[df['学号'] == student_id]['姓名'].iloc[0]
 
             # 生成电子邮件内容
-            email_content = generate_email_content(student_id, student_name, grade_entries)
+            email_content = generate_email_content(student_id, student_name, grade_entries, gpa_entries)
 
-            # print(email_content)
+            print(email_content)
             # 发送邮件
-            send_email(student_name, student_id, email_content)
+            # send_email(student_name, student_id, email_content)
 
 
 def end():
@@ -66,6 +69,8 @@ def select_file():
     if filepath:
         filepath_label.config(text=filepath)
 
+def get_gpa_entries():
+    return gpa_entries
 
 # 确保当该脚本被直接运行时，会调用main函数
 if __name__ == "__main__":

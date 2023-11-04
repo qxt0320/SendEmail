@@ -1,4 +1,5 @@
 import re
+
 def create_grades_entry(df, student_id):
     # 根据学生ID筛选出该生的所有成绩
     student_grades = df[df['学号'] == student_id]
@@ -16,10 +17,18 @@ def create_grades_entry(df, student_id):
     grades_entry += '</ul>'
     return grades_entry
 
-def generate_email_content(student_id, student_name, grade_entries):
+def create_gpa_entry(df, student_id):
+    # 根据学生ID筛选出该生的所有绩点
+    student_gpa = df[df['学号'] == student_id]
+    # 创建绩点条目的列表
+    gpa_entry = []
+    for _, row in student_gpa.iterrows():
+        gpa = float(row['五分成绩'])
+        gpa_entry.append(gpa)
+    return gpa_entry
+
+def generate_email_content(student_id, student_name, grade_entries, gpa_entries):
     # 将成绩条目转换为 HTML 格式的字符串
-
-
     high_grades = []
     low_grades = []
 
@@ -39,6 +48,8 @@ def generate_email_content(student_id, student_name, grade_entries):
     low_grades_str = "，".join(low_grades)
 
     grades_str = grade_entries
+    gpa_average = sum(gpa_entries)/len(gpa_entries)
+    gpa_average_formatted = "{:.5f}".format(gpa_average)
     email_content = f"""
     <html>
     <head>
@@ -53,6 +64,7 @@ def generate_email_content(student_id, student_name, grade_entries):
         <ul>
             {grades_str}
         </ul>
+        <p>您的绩点为：{gpa_average_formatted}</p>  
     """
 
     if high_grades_str:
