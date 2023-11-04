@@ -41,7 +41,7 @@ def main():
 
             print(email_content)
             # 发送邮件
-            # send_email(student_name, student_id, email_content)
+            send_email(student_name, student_id, email_content)
 
 
 def end():
